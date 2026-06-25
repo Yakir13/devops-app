@@ -1,0 +1,13 @@
+---
+# tasks file for roles/common
+- name: Update apt cache
+  apt:
+    update_cache: yes
+
+- name: Install common packages
+  apt:
+    name:
+      - git
+      - curl
+      - unzip
+    state: present
