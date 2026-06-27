@@ -4,7 +4,7 @@ provider "aws" {
 
 resource "aws_instance" "server" {
   ami           = "ami-06468be052a4195a6"
-  instance_type = "t3.micro"
+  instance_type = "t3.small"
   key_name      = "my-key"
 
   tags = {
@@ -12,6 +12,6 @@ resource "aws_instance" "server" {
   }
 }
 
-output "108.130.116.233" {
+output "public_ip" {
   value = aws_instance.server.public_ip
 }
