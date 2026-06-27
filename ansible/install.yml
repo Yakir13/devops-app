@@ -7,4 +7,4 @@
     - common
     - docker
     - nginx
-    - k3n
+    - k3s
