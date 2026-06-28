@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         IMAGE = "yakir13/devops-app:latest"
+        KUBECONFIG = "/etc/rancher/k3s/k3s.yaml"
     }
 
     stages {
@@ -24,27 +25,13 @@ pipeline {
             }
         }
 
-        stage('Debug K8s') {
-            steps {
-                sh 'pwd'
-                sh 'find k8s'
-                sh 'ls -la k8s'
-            }
-        }
-
         stage('Deploy to K3s') {
             steps {
                 sh '''
-                docker run --rm --network host \
-                  -v /etc/rancher/k3s/k3s.yaml:/kubeconfig \
-                  -v $WORKSPACE/k8s:/k8s \
-                  bitnami/kubectl:latest \
-                  --kubeconfig=/kubeconfig apply -f /k8s/deployment.yml -f /k8s/service.yml
-
-                docker run --rm --network host \
-                  -v /etc/rancher/k3s/k3s.yaml:/kubeconfig \
-                  bitnami/kubectl:latest \
-                  --kubeconfig=/kubeconfig rollout restart deployment/flask-app
+                kubectl apply -f k8s/deployment.yml
+                kubectl apply -f k8s/service.yml
+                kubectl rollout restart deployment/flask-app
+                kubectl rollout status deployment/flask-app
                 '''
             }
         }
