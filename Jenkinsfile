@@ -1,28 +1,26 @@
 pipeline {
     agent any
 
-    stages {
-        stage('Checkout') {
-            steps {
-                checkout scm
-            }
-        }
+    environment {
+        IMAGE = "yakir13/devops-app:latest"
+    }
 
+    stages {
         stage('Build Docker Image') {
             steps {
-                sh 'docker build -t yakir13/devops-app:latest .'
+                sh 'docker build -t $IMAGE .'
             }
         }
 
-        stage('Run Container') {
+        stage('Push Docker Image') {
             steps {
-                sh 'docker run -d -p 5000:5000 yakir13/devops-app:latest'
+                sh 'docker push $IMAGE'
             }
         }
 
         stage('Deploy to K3s') {
             steps {
-                sh 'sudo k3s kubectl apply -f k8s/'
+                sh 'sudo k3s kubectl rollout restart deployment/flask-app'
             }
         }
     }
