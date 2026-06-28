@@ -3,7 +3,6 @@ pipeline {
 
     environment {
         IMAGE = "yakir13/devops-app:latest"
-        KUBECONFIG = "/etc/rancher/k3s/k3s.yaml"
     }
 
     stages {
@@ -25,14 +24,9 @@ pipeline {
             }
         }
 
-        stage('Deploy to K3s') {
+        stage('Done') {
             steps {
-                sh '''
-                kubectl apply -f k8s/deployment.yml
-                kubectl apply -f k8s/service.yml
-                kubectl rollout restart deployment/flask-app
-                kubectl rollout status deployment/flask-app
-                '''
+                echo 'Docker image built and pushed successfully.'
             }
         }
     }
