@@ -24,9 +24,20 @@ pipeline {
             }
         }
 
-        stage('Deploy Placeholder') {
+        stage('Deploy to K3s') {
             steps {
-                sh 'echo "Docker image pushed successfully. K3s deploy will be added next."'
+                sh '''
+                docker run --rm --network host \
+                  -v /etc/rancher/k3s/k3s.yaml:/kubeconfig \
+                  -v $WORKSPACE/k8s:/k8s \
+                  bitnami/kubectl:latest \
+                  --kubeconfig=/kubeconfig apply -f /k8s/
+
+                docker run --rm --network host \
+                  -v /etc/rancher/k3s/k3s.yaml:/kubeconfig \
+                  bitnami/kubectl:latest \
+                  --kubeconfig=/kubeconfig rollout restart deployment/flask-app
+                '''
             }
         }
     }
