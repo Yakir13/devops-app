@@ -24,9 +24,9 @@ pipeline {
             }
         }
 
-        stage('Deploy to K3s') {
+        stage('Deploy Placeholder') {
             steps {
-                sh 'sudo k3s kubectl rollout restart deployment/flask-app'
+                sh 'echo "Docker image pushed successfully. K3s deploy will be added next."'
             }
         }
     }
