@@ -27,7 +27,7 @@ pipeline {
         stage('Debug K8s') {
             steps {
                 sh 'pwd'
-                sh 'find .'
+                sh 'find k8s'
                 sh 'ls -la k8s'
             }
         }
@@ -39,7 +39,7 @@ pipeline {
                   -v /etc/rancher/k3s/k3s.yaml:/kubeconfig \
                   -v $WORKSPACE/k8s:/k8s \
                   bitnami/kubectl:latest \
-                  --kubeconfig=/kubeconfig apply -f /k8s/
+                  --kubeconfig=/kubeconfig apply -f /k8s/deployment.yml -f /k8s/service.yml
 
                 docker run --rm --network host \
                   -v /etc/rancher/k3s/k3s.yaml:/kubeconfig \
