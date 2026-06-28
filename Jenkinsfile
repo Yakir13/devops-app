@@ -24,6 +24,14 @@ pipeline {
             }
         }
 
+        stage('Debug K8s') {
+            steps {
+                sh 'pwd'
+                sh 'find .'
+                sh 'ls -la k8s'
+            }
+        }
+
         stage('Deploy to K3s') {
             steps {
                 sh '''
